@@ -1,0 +1,67 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    compileSdk 35
+    buildToolsVersion "35.0.0"
+
+    defaultConfig {
+        applicationId "io.github.tehcneko.hyperos.aospinstaller"
+        minSdkVersion 30
+        targetSdkVersion 35
+        versionCode rootProject.ext.commitCount
+        versionName "1.0.0"
+    }
+
+    Properties localProperties = new Properties()
+    if (project.rootProject.file('local.properties').exists()) {
+        localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+    }
+
+    signingConfigs {
+        if (localProperties.getProperty("storeFile") != null) {
+            config {
+                storeFile project.rootProject.file(localProperties.getProperty("storeFile"))
+                storePassword localProperties.getProperty("storePassword")
+                keyAlias localProperties.getProperty("keyAlias")
+                keyPassword localProperties.getProperty("keyPassword")
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            if (localProperties.getProperty("storeFile") != null) {
+                signingConfig signingConfigs.config
+            }
+        }
+        release {
+            if (localProperties.getProperty("storeFile") != null) {
+                signingConfig signingConfigs.config
+            } else {
+                signingConfig signingConfigs.debug
+            }
+            minifyEnabled true
+            proguardFiles 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        checkReleaseBuilds false
+    }
+
+    dependenciesInfo.includeInApk false
+    namespace 'io.github.tehcneko.hyperos.aospinstaller'
+}
+
+dependencies {
+    compileOnly 'androidx.annotation:annotation:1.8.2'
+    compileOnly 'io.github.libxposed:api:100'
+    compileOnly project(":libxposed-compat")
+}

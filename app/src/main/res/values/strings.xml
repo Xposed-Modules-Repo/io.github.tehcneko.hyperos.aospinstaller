@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AOSP Package Installer</string>
+    <string name="xposed_description">Use AOSP package installer on Xiaomi Hyper OS or MIUI.</string>
+</resources>
