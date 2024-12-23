@@ -44,6 +44,7 @@ public class Hooker extends XposedModule {
                     "assertValidApkAndInstaller".equals(name)) {
                 Log.d(TAG, "hooking method " + name);
                 hook(method, PackageManagerServiceImplHooker.class);
+                deoptimize(method);
             }
         }
     }
